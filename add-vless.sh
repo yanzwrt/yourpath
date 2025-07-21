@@ -5,79 +5,73 @@
 # Pembuat : Rakha-VPN
 # (C) Hak Cipta 2025
 # =========================================
+
 clear
 dateFromServer=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Date | sed -e 's/< Date: //')
-biji=`date +"%Y-%m-%d" -d "$dateFromServer"`
-#########################
-MYIP=$(wget -qO- ipv4.icanhazip.com);
-MYIP=$(curl -s ipinfo.io/ip )
-MYIP=$(curl -sS ipv4.icanhazip.com)
-MYIP=$(curl -sS ifconfig.me )
+biji=$(date +"%Y-%m-%d" -d "$dateFromServer")
 
-red='\e[1;31m'
-green='\e[0;32m'
+# WARNA
 NC='\e[0m'
-green() { echo -e "\\033[32;1m${*}\\033[0m"; }
-red() { echo -e "\\033[31;1m${*}\\033[0m"; }
+RB='\e[31;1m' # Merah
+GB='\e[32;1m' # Hijau
+YB='\e[33;1m' # Kuning
+BB='\e[34;1m' # Biru
+WB='\e[37;1m' # Putih
 
-clear
+MYIP=$(curl -sS ifconfig.me)
 domain=$(cat /root/domain)
-MYIP2=$(wget -qO- ipv4.icanhazip.com);
-until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${CLIENT_EXISTS} == '0' ]]; do
-		echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-        echo -e "\\E[0;47;30m     Tambah Akun XRAY Vless WS     \E[0m"
-        echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+MYIP2=$(curl -sS ipv4.icanhazip.com)
 
-		read -rp "Nama Pengguna/Password : " -e user
-		CLIENT_EXISTS=$(grep -w $user /usr/local/etc/xray/vless.json | wc -l)
-
-		if [[ ${CLIENT_EXISTS} == '1' ]]; then
+# FORM INPUT USER
 clear
-		    echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-            echo -e "\\E[0;47;30m      Tambah Akun XRAY Vless       \E[0m"
-            echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-			echo ""
-			echo "nama pengguna (user) yang ingin kamu buat sudah ada sebelumnya."
-			echo ""
-			read -n 1 -s -r -p "tekan apa saja untuk kembali ke menu"
-			menu
-		fi
-	done
+until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${CLIENT_EXISTS} == '0' ]]; do
+    echo -e "${BB}════════════════════════════════════════════════${NC}"
+    echo -e "${WB}         Tambah Akun XRAY VLESS WS             ${NC}"
+    echo -e "${BB}════════════════════════════════════════════════${NC}"
+    
+    read -rp "➤ Masukkan Nama Pengguna : " -e user
+    CLIENT_EXISTS=$(grep -w $user /usr/local/etc/xray/vless.json | wc -l)
 
-read -p "Bug Address (Example: www.google.com) : " address
-read -p "Bug SNI/Host (Example : m.facebook.com) : " hst
-read -p "Expired (days) : " masaaktif
+    if [[ ${CLIENT_EXISTS} == '1' ]]; then
+        echo -e "${RB}⚠️  Nama pengguna sudah terdaftar. Silakan gunakan nama lain.${NC}"
+        read -n 1 -s -r -p "$(echo -e "${YB}Tekan tombol apa saja untuk kembali ke menu${NC}")"
+        menu
+    fi
+done
+
+read -p "➤ Bug Address (cth: www.google.com) : " address
+read -p "➤ Bug SNI/Host (cth: m.facebook.com) : " hst
+read -p "➤ Masa Aktif (hari) : " masaaktif
+
+# SET KONFIGURASI
 bug_addr=${address}.
 bug_addr2=${address}
-if [[ $address == "" ]]; then
-sts=$bug_addr2
-else
-sts=$bug_addr
-fi
+sts=${bug_addr2}
+[[ $address != "" ]] && sts=${bug_addr}
+
 bug=${hst}
 bug2=${domain}
-if [[ $hst == "" ]]; then
-sni=$bug2
-else
-sni=$bug
-fi
+sni=${bug2}
+[[ $hst != "" ]] && sni=${bug}
 
-uuid=$(cat /proc/sys/kernel/random/uuid)
-exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
-hariini=`date -d "0 days" +"%Y-%m-%d"`
+uuid=$user
+exp=$(date -d "$masaaktif days" +"%Y-%m-%d")
+hariini=$(date +"%Y-%m-%d")
 
+# TAMBAH KE KONFIGURASI XRAY
 sed -i '/#tls$/a\### '"$user $exp"'\
-},{"id": "'""$user""'","email": "'""$user""'"' /usr/local/etc/xray/vless.json
+},{"id": "'$uuid'","email": "'$user'"' /usr/local/etc/xray/vless.json
 sed -i '/#none$/a\### '"$user $exp"'\
-},{"id": "'""$user""'","email": "'""$user""'"' /usr/local/etc/xray/vnone.json
+},{"id": "'$uuid'","email": "'$user'"' /usr/local/etc/xray/vnone.json
 
-# Restart Service
+# RESTART XRAY
 systemctl restart xray@vless.service
 systemctl restart xray@vnone.service
 service cron restart
 
-vlesslink1="vless://${user}@${sts}${domain}:443?type=ws&encryption=none&security=tls&host=${domain}&path=/vless&allowInsecure=1&sni=${sni}#XRAY_VLESS_TLS_${user}"
-vlesslink2="vless://${user}@${sts}${domain}:80?type=ws&encryption=none&security=none&host=${domain}&path=/vless#XRAY_VLESS_NTLS_${user}"
+# LINK
+vlesslink1="vless://${uuid}@${sts}${domain}:443?type=ws&encryption=none&security=tls&host=${domain}&path=/vless&allowInsecure=1&sni=${sni}#XRAY_VLESS_TLS_${user}"
+vlesslink2="vless://${uuid}@${sts}${domain}:80?type=ws&encryption=none&security=none&host=${domain}&path=/vless#XRAY_VLESS_NTLS_${user}"
 
 cat > /home/vps/public_html/$user-$exp-VLESSTLS.yaml <<EOF
 port: 7890
@@ -391,35 +385,33 @@ rules:
   - MATCH,rakhaVPN-Autoscript
 EOF
 
+# OUTPUT
 clear
-echo -e ""
-echo -e "════[XRAY VLESS WS]═════"
-echo -e "Remarks           : ${user}"
-echo -e "Domain            : ${domain}"
-echo -e "IP/Host           : ${MYIP}"
-echo -e "Port TLS          : 443"
-echo -e "Port None TLS     : 80, 8080, 8880"
-echo -e "ID                : ${user}"
-echo -e "Security          : TLS"
-echo -e "Encryption        : None"
-echo -e "Network           : WS"
-echo -e "Path TLS          : /vless"
-echo -e "Path NTLS         : /vless"
-echo -e "Multipath         : /yourpath"
-echo -e "═══════════════════"
-echo -e "Dibuat tanggal    : $hariini"
-echo -e "Berakhir pada     : $exp"
-echo -e "═══════════════════"
-echo -e "Link WS TLS       : ${vlesslink1}"
-echo -e "═══════════════════"
-echo -e "Link WS None TLS  : ${vlesslink2}"
-echo -e "═══════════════════"
-echo -e "YAML WS TLS       : http://${MYIP2}:81/$user-VLESSTLS.yaml"
-echo -e "═══════════════════"
-echo -e "YAML WS None TLS  : http://${MYIP2}:81/$user-VLESSNTLS.yaml"
-echo -e "═══════════════════"
-echo -e ""
-echo -e "Script Mod By Rakha-VPN"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "${WB}             Detail Akun XRAY VLESS WS          ${NC}"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "📌 Username         : ${user}"
+echo -e "🌐 Domain           : ${domain}"
+echo -e "🔐 IP/Host          : ${MYIP}"
+echo -e "🔒 Port TLS         : 443"
+echo -e "🔓 Port Non-TLS     : 80, 8080, 8880"
+echo -e "🆔 UUID             : ${uuid}"
+echo -e "🔒 Security         : TLS"
+echo -e "🔁 Network          : WS"
+echo -e "📄 Path TLS         : /vless"
+echo -e "📄 Path Non-TLS     : /vless"
+echo -e "🧩 Multipath        : /yourpath"
+echo -e "📆 Tanggal Dibuat   : ${hariini}"
+echo -e "⏳ Berakhir Pada    : ${exp}"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "🔗 Link TLS         : ${vlesslink1}"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "🔗 Link Non-TLS     : ${vlesslink2}"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "📄 YAML TLS         : http://${MYIP2}:81/$user-VLESSTLS.yaml"
+echo -e "📄 YAML Non-TLS     : http://${MYIP2}:81/$user-VLESSNTLS.yaml"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "✨ Script by: Rakha-VPN"
 echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} Back to menu . . .") "
+read -p "$(echo -e "${YB}Tekan Enter untuk kembali ke menu ...${NC}")"
 menu

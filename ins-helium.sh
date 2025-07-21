@@ -7,9 +7,9 @@ NC='\e[0m'
 clear
 if [[ -e /usr/local/sbin/helium ]]; then
      echo ""
-     echo -e "${green}Ads Block Already Install${NC}"
+     echo -e "${green}Ads Block Sudah Terpasang${NC}"
      echo ""
-	 read -n1 -r -p "Press any key to continue..."
+	 read -n1 -r -p "tekan apa saja untuk melanjutkan..."
 	 menu
 else
 

@@ -30,11 +30,11 @@ sleep 1
 #if [[ -z $InputPass ]]; then
 #exit 0
 #fi
-echo -e "[ ${green}INFO${NC} ] Processing . . . "
+echo -e "[ ${green}INFO${NC} ] proses . . . "
 mkdir -p /root/backup
 sleep 1
 clear
-echo " Please Wait VPS Data Backup In Progress . . . "
+echo " Silahkan Tunggu VPS Data Backup sedang dijalankan . . . "
 #cp -r /root/.acme.sh /root/backup/ &> /dev/null
 #cp -r /var/lib/premium-script/ /root/backup/premium-script
 #cp -r /usr/local/etc/xray /root/backup/xray
@@ -50,20 +50,20 @@ url=$(rclone link dr:backup/$IP-$date-$domain-yourpath.zip)
 id=(`echo $url | grep '^https' | cut -d'=' -f2`)
 link="https://drive.google.com/u/4/uc?id=${id}&export=download"
 clear
-echo -e "\033[1;37mVPS Data Backup By NevermoreSSH\033[0m
-\033[1;37mTelegram : https://t.me/todfix667 / @NevermoreSSH\033[0m"
+echo -e "\033[1;37mVPS Data Backup By RakhaVPN\033[0m
+\033[1;37mTelegram : https://t.me/rakha21 / @RakhaVPN\033[0m"
 echo ""
-echo "Please Copy Link Below & Save In Notepad"
+echo "silahkan copy link dan simpan di notepad"
 echo ""
-echo -e "Your VPS IP ( \033[1;37m$IP\033[0m )"
+echo -e "IP VPS Anda ( \033[1;37m$IP\033[0m )"
 #echo ""
 #echo -e "Your VPS Data Backup Password : \033[1;37m$InputPass\033[0m"
 echo ""
 echo -e "\033[1;37m$link\033[0m"
 echo ""
-echo "If you want to restore data, please enter the link above"
+echo "Jika Anda ingin mengembalikan data, silakan masukkan tautan di atas"
 rm -rf /root/backup
 rm -r /root/$IP-$date-$domain-yourpath.zip
 echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} Back to menu . . .") "
+read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} kembali ke menu . . .") "
 menu

@@ -2,8 +2,8 @@
 # =========================================
 # Quick Setup | Script Setup Manager
 # Edition : Stable Edition V1.0
-# Auther  : NevermoreSSH
-# (C) Copyright 2022
+# Auther  : RakhaVPN
+# (C) Copyright 2025
 # =========================================
 red='\e[1;31m'
 green='\e[0;32m'
@@ -332,36 +332,41 @@ service cron restart
 
 clear
 echo -e ""
-echo -e "════════════[TRIAL XRAY TROJAN TCP XTLS]════════════"
-echo -e "Remarks              : ${user}"
-echo -e "Domain               : ${domain}"
-echo -e "Password             : ${uuid}"
-echo -e "Port Direct          : 443"
-echo -e "Port Splice          : 443"
-echo -e "Encryption           : None"
-echo -e "Network              : TCP"
-echo -e "Security             : XTLS"
-echo -e "Flow                 : Direct & Splice"
-echo -e "AllowInsecure        : True/Allow"
-echo -e "═══════════════════"
-echo -e "Link Direct          : ${trojanlink1}"
-echo -e "═══════════════════"
-echo -e "Link Direct UDP 443  : ${trojanlink2}"
-echo -e "═══════════════════"
-echo -e "Link Splice          : ${trojanlink3}"
-echo -e "═══════════════════"
-echo -e "Link Splice UDP 443  : ${trojanlink4}"
-echo -e "═══════════════════"
-echo -e "YAML Direct          : http://${MYIP2}:81/$user-TRDIRECT.yaml"
-echo -e "═══════════════════"
-echo -e "YAML Splice          : http://${MYIP2}:81/$user-TRSPLICE.yaml"
-echo -e "═══════════════════"
-echo -e "Created On           : $hariini"
-echo -e "Expired On           : $exp"
-echo -e "═══════════════════"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "        ${green}AKUN TRIAL XRAY TROJAN TCP XTLS${NC}         "
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "Username          : ${user}"
+echo -e "Domain            : ${domain}"
+echo -e "Password / UUID   : ${uuid}"
+echo -e "Port Direct       : 443"
+echo -e "Port Splice       : 443"
+echo -e "Enkripsi          : None"
+echo -e "Jenis Koneksi     : TCP"
+echo -e "Security          : XTLS"
+echo -e "Flow              : Direct & Splice"
+echo -e "Allow Insecure    : True (diizinkan)"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "Tanggal Dibuat            : ${hariini}"
+echo -e "Tanggal Expired           : ${exp}"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "Link Trojan Direct        :"
+echo -e "${green}${trojanlink1}${NC}"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "Link Trojan Direct UDP443 :"
+echo -e "${green}${trojanlink2}${NC}"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "Link Trojan Splice        :"
+echo -e "${green}${trojanlink3}${NC}"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "Link Trojan Splice UDP443 :"
+echo -e "${green}${trojanlink4}${NC}"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "YAML Config Direct        : http://${MYIP2}:81/${user}-TRDIRECT.yaml"
+echo -e "YAML Config Splice        : http://${MYIP2}:81/${user}-TRSPLICE.yaml"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e ""
-echo -e "Autoscript By NevermoreSSH"
+echo -e "     ${green}Script Otomatis oleh RakhaVPN${NC}"
 echo -e ""
-echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} Back to menu . . .") "
+read -p "$( echo -e "Tekan ${orange}[ ${NC}${green}Enter${NC} ${orange}]${NC} untuk kembali ke menu...") "
 menu
+

@@ -5,29 +5,33 @@
 # Pembuat : Rakha-VPN
 # (C) Hak Cipta 2025
 # =========================================
+
 red='\e[1;31m'
 green='\e[0;32m'
+orange='\e[0;33m'
 NC='\e[0m'
 green() { echo -e "\\033[32;1m${*}\\033[0m"; }
 red() { echo -e "\\033[31;1m${*}\\033[0m"; }
+
 clear
 MYIP2=$(wget -qO- ipv4.icanhazip.com);
 domain=$(cat /root/domain)
 user=TRIAL-`echo $RANDOM | head -c4`
 uuid=$(cat /proc/sys/kernel/random/uuid)
 masaaktif=1
-echo ""
-echo ""
 exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
 hariini=`date -d "0 days" +"%Y-%m-%d"`
 
+# Tambahkan user trial ke konfigurasi
 sed -i '/#tr$/a\### '"$user $exp"'\
 },{"password": "'""$uuid""'","email": "'""$user""'"' /usr/local/etc/xray/trojanws.json
 sed -i '/#trnone$/a\### '"$user $exp"'\
 },{"password": "'""$uuid""'","email": "'""$user""'"' /usr/local/etc/xray/trnone.json
 
+# Generate link akun
 trojanlink1="trojan://${uuid}@${domain}:443?type=ws&security=tls&host=${domain}&path=/trojan&sni=${domain}#XRAY_TROJAN_TLS_${user}"
 trojanlink2="trojan://${uuid}@${domain}:80?type=ws&security=none&host=${domain}&path=/trojan-ntls#XRAY_TROJAN_NTLS_${user}"
+
 
 cat > /home/vps/public_html/$user-TRTLS.yaml <<EOF
 port: 7890
@@ -183,36 +187,36 @@ rules:
   - MATCH,NevermoreSSH-Autoscript
 EOF
 
+# Restart service
 systemctl restart xray@trojanws.service
 systemctl restart xray@trnone.service
 service cron restart
 
+# Tampilan output akhir
 clear
-echo -e ""
-echo -e "════[TRIAL XRAY TROJAN WS]════"
-echo -e "Remarks           : ${user}"
-echo -e "Domain            : ${domain}"
-echo -e "Port TLS          : 443"
-echo -e "Port None TLS     : 80, 8080, 8880"
-echo -e "ID                : ${uuid}"
-echo -e "Security          : TLS"
-echo -e "Encryption        : None"
-echo -e "Network           : WS"
-echo -e "Path TLS          : /trojan"
-echo -e "Path NTLS         : /trojan"
-echo -e "═══════════════════"
-echo -e "Link WS TLS       : ${trojanlink1}"
-echo -e "═══════════════════"
-echo -e "Link WS None TLS  : ${trojanlink2}"
-echo -e "═══════════════════"
-echo -e "YAML WS TLS       : http://${MYIP2}:81/$user-TRTLS.yaml"
-echo -e "═══════════════════"
-echo -e "Created On        : $hariini"
-echo -e "Expired On        : $exp"
-echo -e "═══════════════════"
-echo -e ""
-echo -e "Autoscript By Rakha-VPN"
-echo -e ""
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "            ${green}Trial XRAY Trojan WebSocket${NC}"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e " ${orange}➤${NC} Username       : ${user}"
+echo -e " ${orange}➤${NC} Domain         : ${domain}"
+echo -e " ${orange}➤${NC} Port TLS       : 443"
+echo -e " ${orange}➤${NC} Port Non TLS   : 80, 8080, 8880"
+echo -e " ${orange}➤${NC} UUID           : ${uuid}"
+echo -e " ${orange}➤${NC} Security       : TLS"
+echo -e " ${orange}➤${NC} Enkripsi       : None"
+echo -e " ${orange}➤${NC} Network        : WS (WebSocket)"
+echo -e " ${orange}➤${NC} Path TLS       : /trojan"
+echo -e " ${orange}➤${NC} Path Non-TLS   : /trojan"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e " ${orange}➤${NC} Link TLS       : ${trojanlink1}"
+echo -e " ${orange}➤${NC} Link Non-TLS   : ${trojanlink2}"
+echo -e " ${orange}➤${NC} YAML Clash     : http://${MYIP2}:81/$user-TRTLS.yaml"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e " ${orange}➤${NC} Dibuat Tanggal : ${hariini}"
+echo -e " ${orange}➤${NC} Kadaluarsa     : ${exp}"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "  Skrip Mod By ${green}Rakha-VPN${NC}"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} Back to menu . . .") "
+read -p "$( echo -e "Tekan ${orange}[ ${NC}${green}Enter${NC} ${orange}]${NC} untuk kembali ke menu . . .") "
 menu

@@ -2,8 +2,8 @@
 # =========================================
 # Quick Setup | Script Setup Manager
 # Edition : Stable Edition V1.0
-# Auther  : NevermoreSSH
-# (C) Copyright 2022
+# Auther  : RakhaVPN
+# (C) Copyright 2025
 # =========================================
 clear
 dateFromServer=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Date | sed -e 's/< Date: //')
@@ -36,7 +36,7 @@ domain=$(cat /root/domain)
 MYIP2=$(wget -qO- ipv4.icanhazip.com);
 until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${user_EXISTS} == '0' ]]; do
 		echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-            echo -e "\\E[0;47;30m     Add XRAY Trojan WS Account    \E[0m"
+            echo -e "\\E[0;47;30m     Tambah Akun XRAY Trojan WS    \E[0m"
         echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 
 		read -rp "Nama Pengguna/password : " -e user

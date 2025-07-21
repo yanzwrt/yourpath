@@ -2,8 +2,7 @@
 # =========================================
 # Quick Setup | Script Setup Manager
 # Edition : Stable Edition V1.0
-# Auther  : NevermoreSSH
-# Modified by RakhaVPN
+# Auther  : RakhaVPN
 # =========================================
 
 red='\e[1;31m'

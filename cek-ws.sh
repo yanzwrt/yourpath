@@ -12,7 +12,7 @@ NC='\e[0m'
 echo -n > /tmp/other.txt
 data=( `cat /usr/local/etc/xray/config.json | grep '^###' | cut -d ' ' -f 2 | sort | uniq`);
 echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e " \E[0;47;30m     XRAY Vmess WS User Login      \E[0m"
+echo -e " \E[0;47;30m     Pengguna Login XRAY Vmess WS       \E[0m"
 echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 for akun in "${data[@]}"
 do
@@ -46,5 +46,5 @@ rm -rf /tmp/other.txt
 done
 echo ""
 echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} Back to menu . . .") "
+read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} kembali ke menu . . .") "
 menu

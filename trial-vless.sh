@@ -174,13 +174,13 @@ proxies:
         Host: ${domain}
     udp: true
 proxy-groups:
-  - name: NevermoreSSH-Autoscript
+  - name: RakhaVPN-Autoscript
     type: select
     proxies:
       - XRAY_VLESS_TLS_${user}
       - DIRECT
 rules:
-  - MATCH,NevermoreSSH-Autoscript
+  - MATCH,RakhaVPN-Autoscript
 EOF
 
 cat > /home/vps/public_html/$user-VLESSNTLS.yaml <<EOF
@@ -330,13 +330,13 @@ proxies:
         Host: ${domain}
     udp: true
 proxy-groups:
-  - name: NevermoreSSH-Autoscript
+  - name: RakhaVPN-Autoscript
     type: select
     proxies:
       - XRAY_VLESS_NON_TLS_${user}
       - DIRECT
 rules:
-  - MATCH,NevermoreSSH-Autoscript
+  - MATCH,RakhaVPN-Autoscript
 EOF
 
 systemctl restart xray@vless.service
@@ -345,33 +345,35 @@ service cron restart
 
 clear
 echo -e ""
-echo -e "════[TRIAL XRAY VLESS WS]════"
-echo -e "Remarks           : ${user}"
-echo -e "Domain            : ${domain}"
-echo -e "Port TLS          : 443"
-echo -e "Port None TLS     : 80, 8080, 8880"
-echo -e "ID                : ${uuid}"
-echo -e "Security          : TLS"
-echo -e "Encryption        : None"
-echo -e "Network           : WS"
-echo -e "Path TLS          : /vless"
-echo -e "Path NTLS         : /vless"
-echo -e "Multipath         : /yourpath"
-echo -e "═══════════════════"
-echo -e "Link WS TLS       : ${vlesslink1}"
-echo -e "═══════════════════"
-echo -e "Link WS None TLS  : ${vlesslink2}"
-echo -e "═══════════════════"
-echo -e "YAML WS TLS       : http://${MYIP2}:81/$user-VLESSTLS.yaml"
-echo -e "═══════════════════"
-echo -e "YAML WS None TLS  : http://${MYIP2}:81/$user-VLESSNTLS.yaml"
-echo -e "═══════════════════"
-echo -e "Created On        : $hariini"
-echo -e "Expired On        : $exp"
-echo -e "═══════════════════"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "            ${green}AKUN TRIAL XRAY VLESS WS${NC}             "
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "Username         : ${user}"
+echo -e "Domain           : ${domain}"
+echo -e "Port TLS         : 443"
+echo -e "Port Non-TLS     : 80, 8080, 8880"
+echo -e "UUID             : ${uuid}"
+echo -e "Security         : TLS"
+echo -e "Enkripsi         : None"
+echo -e "Jenis Koneksi    : WebSocket (WS)"
+echo -e "Path TLS         : /vless"
+echo -e "Path Non-TLS     : /vless"
+echo -e "Multipath        : /yourpath"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "Link VLESS TLS        :"
+echo -e " ${green}${vlesslink1}${NC}"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "Link VLESS Non TLS    :"
+echo -e " ${green}${vlesslink2}${NC}"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "YAML TLS              : http://${MYIP2}:81/${user}-VLESSTLS.yaml"
+echo -e "YAML Non TLS          : http://${MYIP2}:81/${user}-VLESSNTLS.yaml"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "Dibuat Tanggal        : ${hariini}"
+echo -e "Berakhir Tanggal      : ${exp}"
+echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e ""
-echo -e "Autoscript By RakhaVPN"
+echo -e "     ${green}Auto Script RakhaVPN${NC}"
 echo -e ""
-echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} Back to menu . . .") "
+read -p "$( echo -e "Tekan ${orange}[ ${NC}${green}Enter${NC} ${orange}]${NC} untuk kembali ke menu...") " 
 menu

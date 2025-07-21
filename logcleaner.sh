@@ -3,7 +3,7 @@
 # Quick Setup | Script Setup Manager
 # Edition : Stable Edition V1.0
 # Auther  : RakhaVPN
-# (C) Copyright 2022
+# (C) Copyright 2025
 # =========================================
 clear
 data=(`find /var/log/ -name '*.log'`);
@@ -30,7 +30,7 @@ echo > /var/log/messages
 echo > /var/log/debug
 bcc=`date`
 echo ""
-echo "Successfully clean log at $bcc"
+echo "Berhasil membersihkan log di $bcc"
 sleep 0.5
 clear
 echo ""

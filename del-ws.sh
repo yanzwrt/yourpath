@@ -3,7 +3,7 @@
 # Quick Setup | Script Setup Manager
 # Edition : Stable Edition V1.0
 # Auther  : RakhaVPN
-# (C) Copyright 2022
+# (C) Copyright 2025
 # =========================================
 clear
 red='\e[1;31m'
@@ -12,27 +12,27 @@ NC='\e[0m'
 NUMBER_OF_CLIENTS=$(grep -c -E "^### " "/usr/local/etc/xray/config.json")
 	if [[ ${NUMBER_OF_CLIENTS} == '0' ]]; then
         echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-        echo -e "\\E[0;47;30m     Delete XRAY Vmess WS Account  \E[0m"
+        echo -e "\\E[0;47;30m    Hapus Akun XRAY Vmess WS  \E[0m"
         echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 		echo ""
-		echo "You have no existing clients!"
+		echo "Anda tidak memiliki pengguna!"
         echo ""
 		exit 1
 	fi
     echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-    echo -e "\\E[0;47;30m   Delete XRAY Vmess WS Account    \E[0m"
+    echo -e "\\E[0;47;30m   Hapus Akun XRAY Vmess WS    \E[0m"
     echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 	
-	echo " Select the existing client you want to remove"
-	echo " Press CTRL+C to return"
+	echo " silahkan pilih pengguna untuk dihapus"
+	echo " tekan CTRL+C untuk membatalkan"
 	echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-	echo "     No  Expired   User"
+	echo "     Tidak ada pengguna kadaluwarsa"
 	grep -E "^### " "/usr/local/etc/xray/config.json" | cut -d ' ' -f 2-3 | nl -s ') '
 	until [[ ${CLIENT_NUMBER} -ge 1 && ${CLIENT_NUMBER} -le ${NUMBER_OF_CLIENTS} ]]; do
 		if [[ ${CLIENT_NUMBER} == '1' ]]; then
-			read -rp "Select one client [1]: " CLIENT_NUMBER
+			read -rp "Pilih satu pengguna [1]: " CLIENT_NUMBER
 		else
-			read -rp "Select one client [1-${NUMBER_OF_CLIENTS}]: " CLIENT_NUMBER
+			read -rp "Pilih satu pengguna [1-${NUMBER_OF_CLIENTS}]: " CLIENT_NUMBER
 		fi
 	done
 user=$(grep -E "^### " "/usr/local/etc/xray/config.json" | cut -d ' ' -f 2 | sed -n "${CLIENT_NUMBER}"p)
@@ -44,13 +44,13 @@ rm -f /home/vps/public_html/$user-VMESSTLS.yaml /home/vps/public_html/$user-VMES
 systemctl restart xray.service
 systemctl restart xray@none.service
 clear
-echo " XRAY Vmess WS Account Deleted"
+echo " Akun XRAY Vmess WS Dihapus"
 echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo " Client Name : $user"
-echo " Expired On  : $exp"
+echo " Nama Pengguna  : $user"
+echo " Berakhir Pada  : $exp"
 echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 echo -e ""
 echo -e "Script Mod By RakhaVPN"
 echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} Back to menu . . .") "
+read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} kembali ke menu . . .") "
 menu

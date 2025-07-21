@@ -5,9 +5,16 @@
 # Pembuat : Rakha-VPN
 # (C) Hak Cipta 2025
 # =========================================
-red='\e[1;31m'
-green='\e[0;32m'
+# WARNA TERMINAL
 NC='\e[0m'
+RED='\e[31;1m'
+GREEN='\e[32;1m'
+YELLOW='\e[33;1m'
+BLUE='\e[34;1m'
+MAGENTA='\e[35;1m'
+CYAN='\e[36;1m'
+WHITE='\e[37;1m'
+
 clear
 dateFromServer=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Date | sed -e 's/< Date: //')
 biji=`date +"%Y-%m-%d" -d "$dateFromServer"`
@@ -32,29 +39,26 @@ red() { echo -e "\\033[31;1m${*}\\033[0m"; }
 
 domain=$(cat /root/domain)
 MYIP=$(wget -qO- ipv4.icanhazip.com);
+# INPUT USERNAME
 until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${CLIENT_EXISTS} == '0' ]]; do
-		echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-        echo -e "\\E[0;47;30m  Add XRAY TROJAN TCP XTLS Account  \E[0m"
-        echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-		read -rp "Username : " -e user
-		CLIENT_EXISTS=$(grep -w $user /usr/local/etc/xray/xtrojan.json | wc -l)
+    clear
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${WHITE}          ⇱ Buat Akun Trojan TCP XTLS ⇲         ${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    read -rp "❯ Username           : " -e user
+    CLIENT_EXISTS=$(grep -w "$user" /usr/local/etc/xray/xtrojan.json | wc -l)
 
-		if [[ ${CLIENT_EXISTS} == '1' ]]; then
-clear
-		echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-        echo -e "\\E[0;47;30m  Add XRAY TROJAN TCP XTLS Account  \E[0m"
-        echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-		echo ""
-		echo "A client with the specified name was already created, please choose another name."
-		echo ""
-		read -n 1 -s -r -p "Press any key to back on menu"
-		menu
-		fi
-	done
+    if [[ ${CLIENT_EXISTS} == '1' ]]; then
+        echo -e ""
+        echo -e "${RED}⚠️ Username sudah ada, silakan gunakan nama lain!${NC}"
+        read -n 1 -s -r -p "Tekan tombol apapun untuk kembali..."
+        menu
+    fi
+done
 	
-read -p "Bug Address (Example: www.google.com) : " address
-read -p "Bug SNI/Host (Example : m.facebook.com) : " hst
-read -p "Expired (days) : " masaaktif
+read -p "➤ Bug Address (cth: www.google.com) : " address
+read -p "➤ Bug SNI/Host (cth: m.facebook.com) : " hst
+read -p "➤ Masa Aktif (hari) : " masaaktif
 bug_addr=${address}.
 bug_addr2=${address}
 if [[ $address == "" ]]; then
@@ -383,40 +387,36 @@ proxy-groups:
 rules:
   - MATCH,RakhaVPN-AUTOSCRIPT
 EOF
-
+# OUTPUT
 clear
-echo -e ""
-echo -e "════[XRAY TROJAN TCP XTLS]═════"
-echo -e "Remarks              : ${user}"
-echo -e "Domain               : ${domain}"
-echo -e "IP/Host              : ${MYIP}"
-echo -e "Password             : ${user}"
-echo -e "Port Direct          : 443"
-echo -e "Port Splice          : 443"
-echo -e "Encryption           : None"
-echo -e "Network              : TCP"
-echo -e "Security             : XTLS"
-echo -e "Flow                 : Direct & Splice"
-echo -e "AllowInsecure        : True/Allow"
-echo -e "═══════════════════"
-echo -e "Link Direct          : ${trojanlink1}"
-echo -e "═══════════════════"
-echo -e "Link Direct UDP 443  : ${trojanlink2}"
-echo -e "═══════════════════"
-echo -e "Link Splice          : ${trojanlink3}"
-echo -e "═══════════════════"
-echo -e "Link Splice UDP 443  : ${trojanlink4}"
-echo -e "═══════════════════"
-echo -e "YAML Direct          : http://${MYIP}:81/$user-TRDIRECT.yaml"
-echo -e "═══════════════════"
-echo -e "YAML Splice          : http://${MYIP}:81/$user-TRSPLICE.yaml"
-echo -e "═══════════════════"
-echo -e "Created On           : $hariini"
-echo -e "Expired On           : $exp"
-echo -e "═══════════════════"
-echo -e ""
-echo -e ""
-echo -e "Script Mod By Rakha-VPN"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${WHITE}         ⇱ XRAY | Trojan TCP XTLS ⇲           ${NC}"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${GREEN}📌 Informasi Akun:${NC}"
+echo -e " 🟢 Username           : ${user}"
+echo -e " 🟢 Domain             : ${domain}"
+echo -e " 🟢 IP VPS             : ${MYIP}"
+echo -e " 🟢 Port               : 443"
+echo -e " 🟢 SNI / Host         : ${sni}"
+echo -e " 🟢 Alamat Bug         : ${sts}${domain}"
+echo -e " 🟢 Network            : TCP"
+echo -e " 🟢 Security           : XTLS"
+echo -e " 🟢 Flow               : Direct & Splice"
+echo -e " 🟢 Allow Insecure     : true"
+echo -e " 🟢 Dibuat Tanggal     : $hariini"
+echo -e " 🟢 Expired Tanggal    : $exp"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${GREEN}🔗 Link Trojan:${NC}"
+echo -e " 📎 Direct             : ${trojanlink1}"
+echo -e " 📎 Direct UDP 443     : ${trojanlink2}"
+echo -e " 📎 Splice             : ${trojanlink3}"
+echo -e " 📎 Splice UDP 443     : ${trojanlink4}"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${GREEN}📥 File YAML Clash:${NC}"
+echo -e " 📄 Direct             : http://${MYIP}:81/$user-$exp-TRDIRECT.yaml"
+echo -e " 📄 Splice             : http://${MYIP}:81/$user-$exp-TRSPLICE.yaml"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "✅ ${WHITE}Script by Rakha-VPN${NC}"
 echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} Back to menu . . .") "
+read -p "$(echo -e "Tekan ${YELLOW}[ ENTER ]${NC} untuk kembali ke menu...") "
 menu

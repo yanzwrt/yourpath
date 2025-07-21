@@ -2,8 +2,8 @@
 # =========================================
 # Quick Setup | Script Setup Manager
 # Edition : Stable Edition V1.0
-# Auther  : NevermoreSSH
-# (C) Copyright 2022
+# Auther  : RakhaVPN
+# (C) Copyright 2025
 # =========================================
 clear
 dateFromServer=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Date | sed -e 's/< Date: //')
@@ -37,7 +37,7 @@ domain=$(cat /root/domain)
 MYIP2=$(wget -qO- ipv4.icanhazip.com);
 until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${CLIENT_EXISTS} == '0' ]]; do
 echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e "\\E[0;47;30m     Add XRAY Vmess WS Account     \E[0m"
+echo -e "\\E[0;47;30m     Tambah Akun XRAY Vmess WS     \E[0m"
 echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 
                 read -rp "Nama Pengguna/Password : " -e user
@@ -46,13 +46,13 @@ echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━�
                 if [[ ${CLIENT_EXISTS} == '1' ]]; then
 clear
 		                echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-                        echo -e "\\E[0;47;30m     Add XRAY Vmess WS Account     \E[0m"
+                        echo -e "\\E[0;47;30m     Tambah Akun XRAY Vmess WS     \E[0m"
                         echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
                         echo ""
-                        echo "A client with the specified name was already created, please choose another name."
+                        echo "A nama client (user) yang ingin kamu buat sudah ada sebelumnya."
                         echo ""
                         echo -e "═══════════════════"
-                        read -n 1 -s -r -p "Press any key to back on menu"
+                        read -n 1 -s -r -p "tekan apa saja untuk kembali ke menu"
                         menu
                 fi
         done
@@ -439,7 +439,7 @@ EOF
 
 clear
 echo -e ""
-echo -e "════[XRAY VMESS WS]═════"
+echo -e "════════[XRAY VMESS WS]═════════"
 echo -e "Remarks           : ${user}"
 echo -e "Domain            : ${domain}"
 echo -e "IP/Host           : ${MYIP}"
@@ -451,18 +451,18 @@ echo -e "Security          : Auto"
 echo -e "Network           : WS"
 echo -e "Path TLS          : /vmess"
 echo -e "Path NTLS         : /vmess"
-echo -e "═══════════════════"
+echo -e "═══════════════════════════════"
 echo -e "Dibuat tanggal    : $hariini"
 echo -e "Berakhir pada     : $exp"
-echo -e "═══════════════════"
+echo -e "═══════════════════════════════"
 echo -e "Link WS TLS       : ${vmesslink1}"
-echo -e "═══════════════════"
+echo -e "═══════════════════════════════"
 echo -e "Link WS None TLS  : ${vmesslink2}"
-echo -e "═══════════════════"
+echo -e "═══════════════════════════════"
 echo -e "YAML WS TLS       : http://${MYIP2}:81/$user-VMESSTLS.yaml"
-echo -e "═══════════════════"
+echo -e "═══════════════════════════════"
 echo -e "YAML WS None TLS  : http://${MYIP2}:81/$user-VMESSNTLS.yaml"
-echo -e "═══════════════════"
+echo -e "═══════════════════════════════"
 echo -e ""
 echo -e "Script Mod By Rakha-VPN"
 echo ""

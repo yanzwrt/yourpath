@@ -1,79 +1,73 @@
 #!/bin/bash
 # =========================================
 # Quick Setup | Script Setup Manager
-# Edition : Stable Edition V1.0
-# Auther  : RakhaVPN
-# (C) Copyright 2025
+# Edisi   : Stable Edition V1.0
+# Pembuat : RakhaVPN
+# (C) Hak Cipta 2025
 # =========================================
 
 clear
 dateFromServer=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Date | sed -e 's/< Date: //')
 biji=$(date +"%Y-%m-%d" -d "$dateFromServer")
 
-# Ambil IP VPS
+# WARNA
+NC='\e[0m'
+RB='\e[31;1m' # Merah
+GB='\e[32;1m' # Hijau
+YB='\e[33;1m' # Kuning
+BB='\e[34;1m' # Biru
+WB='\e[37;1m' # Putih
+
+# IP & Domain
 MYIP=$(curl -sS ifconfig.me)
 domain=$(cat /root/domain)
 MYIP2=$(curl -sS ipv4.icanhazip.com)
 
-# Warna
-red='\e[1;31m'
-green='\e[0;32m'
-yell='\e[1;33m'
-tyblue='\e[1;36m'
-purple='\e[0;35m'
-NC='\e[0m'
-green() { echo -e "\\033[32;1m${*}\\033[0m"; }
-red() { echo -e "\\033[31;1m${*}\\033[0m"; }
-
+# FORM INPUT USER
 clear
 until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${user_EXISTS} == '0' ]]; do
-    echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-    echo -e "\\E[0;47;30m         TAMBAH AKUN TROJAN WS            \E[0m"
-    echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-    read -rp "➤ Masukkan Username/Password: " -e user
+    echo -e "${BB}════════════════════════════════════════════════${NC}"
+    echo -e "${WB}         Tambah Akun XRAY TROJAN WS            ${NC}"
+    echo -e "${BB}════════════════════════════════════════════════${NC}"
+    read -rp "➤ Masukkan Nama Pengguna : " -e user
     user_EXISTS=$(grep -w $user /usr/local/etc/xray/trojanws.json | wc -l)
     if [[ ${user_EXISTS} == '1' ]]; then
-        clear
-        echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-        echo -e "\\E[0;47;30m         TAMBAH AKUN TROJAN WS            \E[0m"
-        echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-        echo -e ""
-        echo -e "❌ Username sudah digunakan, silakan gunakan nama lain."
-        echo ""
-        read -n 1 -s -r -p "Tekan sembarang tombol untuk kembali ke menu"
+        echo -e "${RB}⚠️  Nama pengguna sudah terdaftar. Silakan gunakan nama lain.${NC}"
+        read -n 1 -s -r -p "$(echo -e "${YB}Tekan tombol apa saja untuk kembali ke menu${NC}")"
         menu
     fi
 done
 
-read -p "➤ Alamat Bug (contoh: www.google.com) : " address
-read -p "➤ Bug SNI/Host (contoh : m.facebook.com) : " hst
-read -p "➤ Masa aktif (hari) : " masaaktif
+read -p "➤ Bug Address (cth: www.google.com) : " address
+read -p "➤ Bug SNI/Host (cth: m.facebook.com) : " hst
+read -p "➤ Masa Aktif (hari) : " masaaktif
 
+# SET KONFIGURASI
 bug_addr=${address}.
 bug_addr2=${address}
 sts=${bug_addr2}
-[[ -n $address ]] && sts=$bug_addr
+[[ $address != "" ]] && sts=${bug_addr}
 
 bug=${hst}
 bug2=${domain}
 sni=${bug2}
-[[ -n $hst ]] && sni=$bug
+[[ $hst != "" ]] && sni=${bug}
 
 exp=$(date -d "$masaaktif days" +"%Y-%m-%d")
-hariini=$(date -d "0 days" +"%Y-%m-%d")
+hariini=$(date +"%Y-%m-%d")
 
-# Tambah user ke config
-sed -i '/#tr$/a\### '"$user $exp"'\n},{"password": "'""$user""'","email": "'""$user""'"' /usr/local/etc/xray/trojanws.json
-sed -i '/#trnone$/a\### '"$user $exp"'\n},{"password": "'""$user""'","email": "'""$user""'"' /usr/local/etc/xray/trnone.json
+# TAMBAH KE KONFIGURASI XRAY
+sed -i '/#tr$/a\### '"$user $exp"'\n},{"password": "'$user'","email": "'$user'"' /usr/local/etc/xray/trojanws.json
+sed -i '/#trnone$/a\### '"$user $exp"'\n},{"password": "'$user'","email": "'$user'"' /usr/local/etc/xray/trnone.json
 
-# Restart layanan
+# RESTART XRAY
 systemctl restart xray@trojanws.service
 systemctl restart xray@trnone.service
 service cron restart
 
-# Link
-trojanlink1="trojan://${user}@${domain}:443?type=ws&security=tls&host=${domain}&path=/trojan&sni=${sni}#${user}"
-trojanlink2="trojan://${user}@${domain}:80?type=ws&security=none&host=${domain}&path=/trojan#${user}"
+# LINK TROJAN WS
+trojanlink1="trojan://${user}@${sts}${domain}:443?type=ws&security=tls&host=${domain}&path=/trojan&sni=${sni}#XRAY_TROJAN_TLS_${user}"
+trojanlink2="trojan://${user}@${sts}${domain}:80?type=ws&security=none&host=${domain}&path=/trojan#XRAY_TROJAN_NTLS_${user}"
 
 # YAML
 cat > /home/vps/public_html/$user-$exp-TRTLS.yaml <<EOF
@@ -230,37 +224,31 @@ rules:
   - MATCH,rakhaVPN-Autoscript
 $(cat /home/vps/public_html/$user-$exp-TRTLS.yaml)
 EOF
-
+# OUTPUT
 clear
-echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e "\\E[0;47;30m            XRAY TROJAN WS DETAIL           \E[0m"
-echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e "➤ Username          : ${user}"
-echo -e "➤ Domain            : ${domain}"
-echo -e "➤ IP VPS            : ${MYIP}"
-echo -e "➤ Port TLS          : 443"
-echo -e "➤ Port None TLS     : 80, 8080, 8880"
-echo -e "➤ Password          : ${user}"
-echo -e "➤ Security          : TLS"
-echo -e "➤ Encryption        : None"
-echo -e "➤ Network           : WS"
-echo -e "➤ Path TLS          : /trojan"
-echo -e "➤ Path NTLS         : /trojan"
-echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e "➤ Dibuat tanggal    : $hariini"
-echo -e "➤ Berakhir tanggal  : $exp"
-echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e "➤ Link WS TLS       :"
-echo -e "${green}${trojanlink1}${NC}"
-echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e "➤ Link WS Non TLS   :"
-echo -e "${green}${trojanlink2}${NC}"
-echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e "➤ YAML WS TLS       : http://${MYIP2}:81/$user-TRTLS.yaml"
-echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e ""
-echo -e "           Script By RakhaVPN"
-echo -e ""
-
-read -p "$( echo -e "Tekan ${red}[ ${NC}${green}Enter${NC} ${red}]${NC} untuk kembali ke menu...") "
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "${WB}            Detail Akun XRAY TROJAN WS          ${NC}"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "📌 Username         : ${user}"
+echo -e "🌐 Domain           : ${domain}"
+echo -e "🔐 IP/Host          : ${MYIP}"
+echo -e "🔒 Port TLS         : 443"
+echo -e "🔓 Port Non-TLS     : 80, 8080, 8880"
+echo -e "🔑 Password         : ${user}"
+echo -e "🔒 Security         : TLS"
+echo -e "🔁 Network          : WS"
+echo -e "📄 Path TLS         : /trojan"
+echo -e "📄 Path Non-TLS     : /trojan"
+echo -e "📆 Tanggal Dibuat   : ${hariini}"
+echo -e "⏳ Berakhir Pada    : ${exp}"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "🔗 Link TLS         : ${trojanlink1}"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "🔗 Link Non-TLS     : ${trojanlink2}"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "📄 YAML TLS         : http://${MYIP2}:81/$user-TRTLS.yaml"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "✨ Script by: RakhaVPN"
+echo ""
+read -p "$(echo -e "${YB}Tekan Enter untuk kembali ke menu ...${NC}")"
 menu

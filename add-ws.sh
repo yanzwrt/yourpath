@@ -1,470 +1,136 @@
 #!/bin/bash
 # =========================================
 # Quick Setup | Script Setup Manager
-# Edition : Stable Edition V1.0
-# Auther  : RakhaVPN
-# (C) Copyright 2025
+# Edisi   : Stable Edition V1.0
+# Pembuat : RakhaVPN
+# (C) Hak Cipta 2025
 # =========================================
+
 clear
 dateFromServer=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Date | sed -e 's/< Date: //')
-biji=`date +"%Y-%m-%d" -d "$dateFromServer"`
-#########################
-MYIP=$(wget -qO- ipv4.icanhazip.com);
-MYIP=$(curl -s ipinfo.io/ip )
-MYIP=$(curl -sS ipv4.icanhazip.com)
-MYIP=$(curl -sS ifconfig.me )
-clear
-red='\e[1;31m'
-green='\e[0;32m'
-yell='\e[1;33m'
-tyblue='\e[1;36m'
-purple='\e[0;35m'
-NC='\e[0m'
-purple() { echo -e "\\033[35;1m${*}\\033[0m"; }
-tyblue() { echo -e "\\033[36;1m${*}\\033[0m"; }
-yellow() { echo -e "\\033[33;1m${*}\\033[0m"; }
-green() { echo -e "\\033[32;1m${*}\\033[0m"; }
-red() { echo -e "\\033[31;1m${*}\\033[0m"; }
+biji=$(date +"%Y-%m-%d" -d "$dateFromServer")
 
-red='\e[1;31m'
-green='\e[0;32m'
-NC='\e[0m'
-green() { echo -e "\\033[32;1m${*}\\033[0m"; }
-red() { echo -e "\\033[31;1m${*}\\033[0m"; }
-
-clear
+MYIP=$(curl -sS ifconfig.me)
 domain=$(cat /root/domain)
-MYIP2=$(wget -qO- ipv4.icanhazip.com);
-until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${CLIENT_EXISTS} == '0' ]]; do
-echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-echo -e "\\E[0;47;30m     Tambah Akun XRAY Vmess WS     \E[0m"
-echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+MYIP2=$(curl -sS ipv4.icanhazip.com)
 
-                read -rp "Nama Pengguna/Password : " -e user
-                CLIENT_EXISTS=$(grep -w $user /usr/local/etc/xray/config.json | wc -l)
+# WARNA
+NC='\e[0m'
+RB='\e[31;1m' # Merah
+GB='\e[32;1m' # Hijau
+YB='\e[33;1m' # Kuning
+BB='\e[34;1m' # Biru
+WB='\e[37;1m' # Putih
 
-                if [[ ${CLIENT_EXISTS} == '1' ]]; then
+# TAMPILAN MENU
 clear
-		                echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-                        echo -e "\\E[0;47;30m     Tambah Akun XRAY Vmess WS     \E[0m"
-                        echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-                        echo ""
-                        echo "A nama client (user) yang ingin kamu buat sudah ada sebelumnya."
-                        echo ""
-                        echo -e "═══════════════════"
-                        read -n 1 -s -r -p "tekan apa saja untuk kembali ke menu"
-                        menu
-                fi
-        done
+until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${CLIENT_EXISTS} == '0' ]]; do
+    echo -e "${BB}════════════════════════════════════════════════${NC}"
+    echo -e "${WB}         Tambah Akun XRAY VMESS WS             ${NC}"
+    echo -e "${BB}════════════════════════════════════════════════${NC}"
+    
+    read -rp "➤ Masukkan Nama Pengguna : " -e user
+    CLIENT_EXISTS=$(grep -w $user /usr/local/etc/xray/config.json | wc -l)
 
-read -p "Bug Address (Example: www.google.com) : " address
-read -p "Bug SNI/Host (Example : m.facebook.com) : " hst
-read -p "Expired (days) : " masaaktif
+    if [[ ${CLIENT_EXISTS} == '1' ]]; then
+        echo -e "${RB}⚠️  Nama pengguna sudah terdaftar. Silakan gunakan nama lain.${NC}"
+        read -n 1 -s -r -p "$(echo -e "${YB}Tekan tombol apa saja untuk kembali ke menu${NC}")"
+        menu
+    fi
+done
+
+read -p "➤ Bug Address (cth: www.google.com) : " address
+read -p "➤ Bug SNI/Host (cth: m.facebook.com) : " hst
+read -p "➤ Masa Aktif (hari) : " masaaktif
+
 bug_addr=${address}.
 bug_addr2=${address}
-if [[ $address == "" ]]; then
-sts=$bug_addr2
-else
-sts=$bug_addr
-fi
+sts=${bug_addr2}
+[[ $address != "" ]] && sts=${bug_addr}
+
 bug=${hst}
 bug2=${domain}
-if [[ $hst == "" ]]; then
-sni=$bug2
-else
-sni=$bug
-fi
+sni=${bug2}
+[[ $hst != "" ]] && sni=${bug}
 
-exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
-hariini=`date -d "0 days" +"%Y-%m-%d"`
+uuid=$user
+exp=$(date -d "$masaaktif days" +"%Y-%m-%d")
+hariini=$(date +"%Y-%m-%d")
+
+# Tambah ke config Xray
 sed -i '/#tls$/a\### '"$user $exp"'\
-},{"id": "'""$user""'","alterId": '"0"',"email": "'""$user""'"' /usr/local/etc/xray/config.json
+},{"id": "'$uuid'","alterId": 0,"email": "'$user'"' /usr/local/etc/xray/config.json
 sed -i '/#none$/a\### '"$user $exp"'\
-},{"id": "'""$user""'","alterId": '"0"',"email": "'""$user""'"' /usr/local/etc/xray/none.json
+},{"id": "'$uuid'","alterId": 0,"email": "'$user'"' /usr/local/etc/xray/none.json
 
-cat> /usr/local/etc/xray/$user-tls.json << EOF
-      {
-      "v": "2",
-      "ps": "XRAY_VMESS_TLS_${user}",
-      "add": "${sts}${domain}",
-      "port": "443",
-      "id": "${user}",
-      "aid": "0",
-      "net": "ws",
-      "path": "/vmess",
-      "type": "none",
-      "host": "${domain}",
-      "tls": "tls",
-      "sni": "${sni}"
+# Buat file konfigurasi vmess
+cat > /usr/local/etc/xray/$user-tls.json <<EOF
+{
+  "v": "2",
+  "ps": "XRAY_VMESS_TLS_${user}",
+  "add": "${sts}${domain}",
+  "port": "443",
+  "id": "${uuid}",
+  "aid": "0",
+  "net": "ws",
+  "path": "/vmess",
+  "type": "none",
+  "host": "${domain}",
+  "tls": "tls",
+  "sni": "${sni}"
 }
 EOF
 
-cat> /usr/local/etc/xray/$user-none.json << EOF
-      {
-      "v": "2",
-      "ps": "XRAY_VMESS_NTLS_${user}",
-      "add": "${sts}${domain}",
-      "port": "80",
-      "id": "${user}",
-      "aid": "0",
-      "net": "ws",
-      "path": "/vmess",
-      "type": "none",
-      "host": "${domain}",
-      "tls": "none"
+cat > /usr/local/etc/xray/$user-none.json <<EOF
+{
+  "v": "2",
+  "ps": "XRAY_VMESS_NTLS_${user}",
+  "add": "${sts}${domain}",
+  "port": "80",
+  "id": "${uuid}",
+  "aid": "0",
+  "net": "ws",
+  "path": "/vmess",
+  "type": "none",
+  "host": "${domain}",
+  "tls": "none"
 }
 EOF
 
-vmess_base641=$( base64 -w 0 <<< $vmess_json1)
-vmess_base642=$( base64 -w 0 <<< $vmess_json2)
+# Encode base64
 vmesslink1="vmess://$(base64 -w 0 /usr/local/etc/xray/$user-tls.json)"
 vmesslink2="vmess://$(base64 -w 0 /usr/local/etc/xray/$user-none.json)"
+
+# Restart layanan
 systemctl restart xray.service
 systemctl restart xray@none.service
 service cron restart
 
-cat > /home/vps/public_html/$user-$exp-VMESSTLS.yaml <<EOF
-port: 7890
-socks-port: 7891
-redir-port: 7892
-mixed-port: 7893
-tproxy-port: 7895
-ipv6: false
-mode: rule
-log-level: silent
-allow-lan: true
-external-controller: 0.0.0.0:9090
-secret: ""
-bind-address: "*"
-unified-delay: true
-profile:
-  store-selected: true
-  store-fake-ip: true
-dns:
-  enable: true
-  ipv6: false
-  use-host: true
-  enhanced-mode: fake-ip
-  listen: 0.0.0.0:7874
-  nameserver:
-    - 8.8.8.8
-    - 1.0.0.1
-    - https://dns.google/dns-query
-  fallback:
-    - 1.1.1.1
-    - 8.8.4.4
-    - https://cloudflare-dns.com/dns-query
-    - 112.215.203.254
-  default-nameserver:
-    - 8.8.8.8
-    - 1.1.1.1
-    - 112.215.203.254
-  fake-ip-range: 198.18.0.1/16
-  fake-ip-filter:
-    - "*.lan"
-    - "*.localdomain"
-    - "*.example"
-    - "*.invalid"
-    - "*.localhost"
-    - "*.test"
-    - "*.local"
-    - "*.home.arpa"
-    - time.*.com
-    - time.*.gov
-    - time.*.edu.cn
-    - time.*.apple.com
-    - time1.*.com
-    - time2.*.com
-    - time3.*.com
-    - time4.*.com
-    - time5.*.com
-    - time6.*.com
-    - time7.*.com
-    - ntp.*.com
-    - ntp1.*.com
-    - ntp2.*.com
-    - ntp3.*.com
-    - ntp4.*.com
-    - ntp5.*.com
-    - ntp6.*.com
-    - ntp7.*.com
-    - "*.time.edu.cn"
-    - "*.ntp.org.cn"
-    - +.pool.ntp.org
-    - time1.cloud.tencent.com
-    - music.163.com
-    - "*.music.163.com"
-    - "*.126.net"
-    - musicapi.taihe.com
-    - music.taihe.com
-    - songsearch.kugou.com
-    - trackercdn.kugou.com
-    - "*.kuwo.cn"
-    - api-jooxtt.sanook.com
-    - api.joox.com
-    - joox.com
-    - y.qq.com
-    - "*.y.qq.com"
-    - streamoc.music.tc.qq.com
-    - mobileoc.music.tc.qq.com
-    - isure.stream.qqmusic.qq.com
-    - dl.stream.qqmusic.qq.com
-    - aqqmusic.tc.qq.com
-    - amobile.music.tc.qq.com
-    - "*.xiami.com"
-    - "*.music.migu.cn"
-    - music.migu.cn
-    - "*.msftconnecttest.com"
-    - "*.msftncsi.com"
-    - msftconnecttest.com
-    - msftncsi.com
-    - localhost.ptlogin2.qq.com
-    - localhost.sec.qq.com
-    - +.srv.nintendo.net
-    - +.stun.playstation.net
-    - xbox.*.microsoft.com
-    - xnotify.xboxlive.com
-    - +.battlenet.com.cn
-    - +.wotgame.cn
-    - +.wggames.cn
-    - +.wowsgame.cn
-    - +.wargaming.net
-    - proxy.golang.org
-    - stun.*.*
-    - stun.*.*.*
-    - +.stun.*.*
-    - +.stun.*.*.*
-    - +.stun.*.*.*.*
-    - heartbeat.belkin.com
-    - "*.linksys.com"
-    - "*.linksyssmartwifi.com"
-    - "*.router.asus.com"
-    - mesu.apple.com
-    - swscan.apple.com
-    - swquery.apple.com
-    - swdownload.apple.com
-    - swcdn.apple.com
-    - swdist.apple.com
-    - lens.l.google.com
-    - stun.l.google.com
-    - +.nflxvideo.net
-    - "*.square-enix.com"
-    - "*.finalfantasyxiv.com"
-    - "*.ffxiv.com"
-    - "*.mcdn.bilivideo.cn"
-    - +.media.dssott.com
-proxies:
-  - name: XRAY_VMESS_TLS_${user}
-    server: ${sts}${domain}
-    port: 443
-    type: vmess
-    uuid: ${user}
-    alterId: 0
-    cipher: auto
-    tls: true
-    skip-cert-verify: true
-    servername: ${sni}
-    network: ws
-    ws-opts:
-      path: /vmess
-      headers:
-        Host: ${domain}
-    udp: true
-proxy-groups:
-  - name: RakhaVPN-Autoscript
-    type: select
-    proxies:
-      - XRAY_VMESS_TLS_${user}
-      - DIRECT
-rules:
-  - MATCH,RakhaVPN-Autoscript
-EOF
-
-cat > /home/vps/public_html/$user-$exp-VMESSNTLS.yaml <<EOF
-port: 7890
-socks-port: 7891
-redir-port: 7892
-mixed-port: 7893
-tproxy-port: 7895
-ipv6: false
-mode: rule
-log-level: silent
-allow-lan: true
-external-controller: 0.0.0.0:9090
-secret: ""
-bind-address: "*"
-unified-delay: true
-profile:
-  store-selected: true
-  store-fake-ip: true
-dns:
-  enable: true
-  ipv6: false
-  use-host: true
-  enhanced-mode: fake-ip
-  listen: 0.0.0.0:7874
-  nameserver:
-    - 8.8.8.8
-    - 1.0.0.1
-    - https://dns.google/dns-query
-  fallback:
-    - 1.1.1.1
-    - 8.8.4.4
-    - https://cloudflare-dns.com/dns-query
-    - 112.215.203.254
-  default-nameserver:
-    - 8.8.8.8
-    - 1.1.1.1
-    - 112.215.203.254
-  fake-ip-range: 198.18.0.1/16
-  fake-ip-filter:
-    - "*.lan"
-    - "*.localdomain"
-    - "*.example"
-    - "*.invalid"
-    - "*.localhost"
-    - "*.test"
-    - "*.local"
-    - "*.home.arpa"
-    - time.*.com
-    - time.*.gov
-    - time.*.edu.cn
-    - time.*.apple.com
-    - time1.*.com
-    - time2.*.com
-    - time3.*.com
-    - time4.*.com
-    - time5.*.com
-    - time6.*.com
-    - time7.*.com
-    - ntp.*.com
-    - ntp1.*.com
-    - ntp2.*.com
-    - ntp3.*.com
-    - ntp4.*.com
-    - ntp5.*.com
-    - ntp6.*.com
-    - ntp7.*.com
-    - "*.time.edu.cn"
-    - "*.ntp.org.cn"
-    - +.pool.ntp.org
-    - time1.cloud.tencent.com
-    - music.163.com
-    - "*.music.163.com"
-    - "*.126.net"
-    - musicapi.taihe.com
-    - music.taihe.com
-    - songsearch.kugou.com
-    - trackercdn.kugou.com
-    - "*.kuwo.cn"
-    - api-jooxtt.sanook.com
-    - api.joox.com
-    - joox.com
-    - y.qq.com
-    - "*.y.qq.com"
-    - streamoc.music.tc.qq.com
-    - mobileoc.music.tc.qq.com
-    - isure.stream.qqmusic.qq.com
-    - dl.stream.qqmusic.qq.com
-    - aqqmusic.tc.qq.com
-    - amobile.music.tc.qq.com
-    - "*.xiami.com"
-    - "*.music.migu.cn"
-    - music.migu.cn
-    - "*.msftconnecttest.com"
-    - "*.msftncsi.com"
-    - msftconnecttest.com
-    - msftncsi.com
-    - localhost.ptlogin2.qq.com
-    - localhost.sec.qq.com
-    - +.srv.nintendo.net
-    - +.stun.playstation.net
-    - xbox.*.microsoft.com
-    - xnotify.xboxlive.com
-    - +.battlenet.com.cn
-    - +.wotgame.cn
-    - +.wggames.cn
-    - +.wowsgame.cn
-    - +.wargaming.net
-    - proxy.golang.org
-    - stun.*.*
-    - stun.*.*.*
-    - +.stun.*.*
-    - +.stun.*.*.*
-    - +.stun.*.*.*.*
-    - heartbeat.belkin.com
-    - "*.linksys.com"
-    - "*.linksyssmartwifi.com"
-    - "*.router.asus.com"
-    - mesu.apple.com
-    - swscan.apple.com
-    - swquery.apple.com
-    - swdownload.apple.com
-    - swcdn.apple.com
-    - swdist.apple.com
-    - lens.l.google.com
-    - stun.l.google.com
-    - +.nflxvideo.net
-    - "*.square-enix.com"
-    - "*.finalfantasyxiv.com"
-    - "*.ffxiv.com"
-    - "*.mcdn.bilivideo.cn"
-    - +.media.dssott.com
-proxies:
-  - name: XRAY_VMESS_NTLS_${user}
-    server: ${sts}${domain}
-    port: 80
-    type: vmess
-    uuid: ${user}
-    alterId: 0
-    cipher: auto
-    tls: false
-    skip-cert-verify: true
-    servername: ${domain}
-    network: ws
-    ws-opts:
-      path: /vmess
-      headers:
-        Host: ${domain}
-    udp: true
-proxy-groups:
-  - name: RakhaVPN-Autoscript
-    type: select
-    proxies:
-      - XRAY_VMESS_NTLS_${user}
-      - DIRECT
-rules:
-  - MATCH,RakhaVPN-Autoscript
-EOF
-
+# OUTPUT
 clear
-echo -e ""
-echo -e "════════[XRAY VMESS WS]═════════"
-echo -e "Remarks           : ${user}"
-echo -e "Domain            : ${domain}"
-echo -e "IP/Host           : ${MYIP}"
-echo -e "Port TLS          : 443"
-echo -e "Port None TLS     : 80, 8080, 8880"
-echo -e "ID                : ${user}"
-echo -e "AlterId           : 0"
-echo -e "Security          : Auto"
-echo -e "Network           : WS"
-echo -e "Path TLS          : /vmess"
-echo -e "Path NTLS         : /vmess"
-echo -e "═══════════════════════════════"
-echo -e "Dibuat tanggal    : $hariini"
-echo -e "Berakhir pada     : $exp"
-echo -e "═══════════════════════════════"
-echo -e "Link WS TLS       : ${vmesslink1}"
-echo -e "═══════════════════════════════"
-echo -e "Link WS None TLS  : ${vmesslink2}"
-echo -e "═══════════════════════════════"
-echo -e "YAML WS TLS       : http://${MYIP2}:81/$user-VMESSTLS.yaml"
-echo -e "═══════════════════════════════"
-echo -e "YAML WS None TLS  : http://${MYIP2}:81/$user-VMESSNTLS.yaml"
-echo -e "═══════════════════════════════"
-echo -e ""
-echo -e "Script Mod By Rakha-VPN"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "${WB}             Detail Akun XRAY VMESS WS          ${NC}"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "📌 Username         : ${user}"
+echo -e "🌐 Domain           : ${domain}"
+echo -e "🔐 IP/Host          : ${MYIP}"
+echo -e "🔒 Port TLS         : 443"
+echo -e "🔓 Port Non-TLS     : 80, 8080, 8880"
+echo -e "🆔 UUID             : ${uuid}"
+echo -e "🔁 AlterId          : 0"
+echo -e "🔗 Path TLS         : /vmess"
+echo -e "🔗 Path Non-TLS     : /vmess"
+echo -e "📆 Tanggal Dibuat   : ${hariini}"
+echo -e "⏳ Berakhir Pada    : ${exp}"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "🔗 Link TLS         : ${vmesslink1}"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "🔗 Link Non-TLS     : ${vmesslink2}"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "📄 YAML TLS         : http://${MYIP2}:81/$user-VMESSTLS.yaml"
+echo -e "📄 YAML Non-TLS     : http://${MYIP2}:81/$user-VMESSNTLS.yaml"
+echo -e "${BB}════════════════════════════════════════════════${NC}"
+echo -e "✨ Script oleh: RakhaVPN"
 echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} Back to menu . . .") "
+read -p "$(echo -e "${YB}Tekan Enter untuk kembali ke menu ...${NC}")"
 menu

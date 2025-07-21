@@ -1,89 +1,69 @@
 #!/bin/bash
 # =========================================
 # Quick Setup | Script Setup Manager
-# Edition : Stable Edition V1.0
-# Auther  : NevermoreSSH
-# (C) Copyright 2022
+# Edisi   : Stable Edition V1.0
+# Pembuat : Rakha-VPN
 # =========================================
-clear
-dateFromServer=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Date | sed -e 's/< Date: //')
-biji=`date +"%Y-%m-%d" -d "$dateFromServer"`
-#########################
-MYIP=$(wget -qO- ipv4.icanhazip.com);
-MYIP=$(curl -s ipinfo.io/ip )
-MYIP=$(curl -sS ipv4.icanhazip.com)
-MYIP=$(curl -sS ifconfig.me )
-clear
-red='\e[1;31m'
-green='\e[0;32m'
-yell='\e[1;33m'
-tyblue='\e[1;36m'
-purple='\e[0;35m'
-NC='\e[0m'
-purple() { echo -e "\\033[35;1m${*}\\033[0m"; }
-tyblue() { echo -e "\\033[36;1m${*}\\033[0m"; }
-yellow() { echo -e "\\033[33;1m${*}\\033[0m"; }
-green() { echo -e "\\033[32;1m${*}\\033[0m"; }
-red() { echo -e "\\033[31;1m${*}\\033[0m"; }
 
-red='\e[1;31m'
-green='\e[0;32m'
+# === Warna ===
 NC='\e[0m'
-green() { echo -e "\\033[32;1m${*}\\033[0m"; }
-red() { echo -e "\\033[31;1m${*}\\033[0m"; }
+RED='\e[31;1m'
+GREEN='\e[32;1m'
+YELLOW='\e[33;1m'
+BLUE='\e[34;1m'
+PURPLE='\e[35;1m'
+CYAN='\e[36;1m'
+WHITE='\e[37;1m'
 
-clear
+# === Info Tanggal ===
+dateFromServer=$(curl -s --insecure https://google.com/ | grep Date | sed -e 's/< Date: //')
+biji=$(date +"%Y-%m-%d" -d "$dateFromServer")
+
+# === IP & Domain ===
+MYIP=$(curl -s ipv4.icanhazip.com)
 domain=$(cat /root/domain)
-MYIP2=$(wget -qO- ipv4.icanhazip.com);
-until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${user_EXISTS} == '0' ]]; do
-            echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-            echo -e "\\E[0;47;30m     Add XRAY Trojan TCP Account   \E[0m"
-            echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 
-		read -rp "Nama Pengguna/Password : " -e user
-		user_EXISTS=$(grep -w $user /usr/local/etc/xray/trojan.json | wc -l)
-
-		if [[ ${user_EXISTS} == '1' ]]; then
+# === Header ===
 clear
-		    echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-            echo -e "\\E[0;47;30m     Add XRAY Trojan TCP Account   \E[0m"
-            echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-			echo ""
-			echo "A client with the specified name was already created, please choose another name."
-			echo ""
-			echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-			read -n 1 -s -r -p "Press any key to back on menu"
-			menu
-		fi
-	done
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${WHITE}     ⇱ XRAY TROJAN TCP TLS ⇲            ${NC}"
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
-read -p "Bug Address (Example: www.google.com) : " address
-read -p "Bug SNI/Host (Example : m.facebook.com) : " hst
-read -p "Expired (days) : " masaaktif
+# === Input Username ===
+until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${user_EXISTS} == '0' ]]; do
+	read -rp "$(echo -e "➤ ${CYAN}Username${NC}         : ") " -e user
+	user_EXISTS=$(grep -w "$user" /usr/local/etc/xray/trojan.json | wc -l)
+
+	if [[ ${user_EXISTS} == '1' ]]; then
+		echo -e "${RED}✖ Username sudah terdaftar!${NC}"
+		exit 1
+	fi
+done
+
+# === Input Lainnya ===
+read -rp "$(echo -e "➤ ${CYAN}Bug Address${NC}      : ") " -e address
+read -rp "$(echo -e "➤ ${CYAN}SNI/Host Bug${NC}     : ") " -e hst
+read -rp "$(echo -e "➤ ${CYAN}Expired (hari)${NC}   : ") " -e masaaktif
+
+# === Logic Domain & SNI ===
 bug_addr=${address}.
-bug_addr2=${address}
-if [[ $address == "" ]]; then
-sts=$bug_addr2
-else
-sts=$bug_addr
-fi
-bug=${hst}
-bug2=${domain}
-if [[ $hst == "" ]]; then
-sni=$bug2
-else
-sni=$bug
-fi
+sts=${address:-$bug_addr}
+sni=${hst:-$domain}
+hariini=$(date -d "0 days" +"%Y-%m-%d")
+exp=$(date -d "$masaaktif days" +"%Y-%m-%d")
 
-exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
-hariini=`date -d "0 days" +"%Y-%m-%d"`
-sed -i '/#tr$/a\### '"$user $exp"'\
-},{"password": "'""$user""'","email": "'""$user""'"' /usr/local/etc/xray/trojan.json
+# === Tambah User ke Config ===
+sed -i "/#tr$/a\### ${user} ${exp}\
+},{\"password\": \"${user}\",\"email\": \"${user}\"" /usr/local/etc/xray/trojan.json
+
+# === Link Trojan ===
 trojanlink="trojan://${user}@${sts}${domain}:443?security=tls&type=tcp&allowInsecure=1&sni=${sni}#XRAY_TROJAN_TCP_${user}"
-# // Restarting Service
+
+# === Restart Service ===
 systemctl restart xray@trojan.service
 service cron restart
 
+# === Generate File YAML ===
 cat > /home/vps/public_html/$user-$exp-TRTCP.yaml <<EOF
 port: 7890
 socks-port: 7891
@@ -115,11 +95,9 @@ dns:
     - 1.1.1.1
     - 8.8.4.4
     - https://cloudflare-dns.com/dns-query
-    - 112.215.203.254
   default-nameserver:
     - 8.8.8.8
     - 1.1.1.1
-    - 112.215.203.254
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter:
     - "*.lan"
@@ -130,90 +108,7 @@ dns:
     - "*.test"
     - "*.local"
     - "*.home.arpa"
-    - time.*.com
-    - time.*.gov
-    - time.*.edu.cn
-    - time.*.apple.com
-    - time1.*.com
-    - time2.*.com
-    - time3.*.com
-    - time4.*.com
-    - time5.*.com
-    - time6.*.com
-    - time7.*.com
-    - ntp.*.com
-    - ntp1.*.com
-    - ntp2.*.com
-    - ntp3.*.com
-    - ntp4.*.com
-    - ntp5.*.com
-    - ntp6.*.com
-    - ntp7.*.com
-    - "*.time.edu.cn"
-    - "*.ntp.org.cn"
     - +.pool.ntp.org
-    - time1.cloud.tencent.com
-    - music.163.com
-    - "*.music.163.com"
-    - "*.126.net"
-    - musicapi.taihe.com
-    - music.taihe.com
-    - songsearch.kugou.com
-    - trackercdn.kugou.com
-    - "*.kuwo.cn"
-    - api-jooxtt.sanook.com
-    - api.joox.com
-    - joox.com
-    - y.qq.com
-    - "*.y.qq.com"
-    - streamoc.music.tc.qq.com
-    - mobileoc.music.tc.qq.com
-    - isure.stream.qqmusic.qq.com
-    - dl.stream.qqmusic.qq.com
-    - aqqmusic.tc.qq.com
-    - amobile.music.tc.qq.com
-    - "*.xiami.com"
-    - "*.music.migu.cn"
-    - music.migu.cn
-    - "*.msftconnecttest.com"
-    - "*.msftncsi.com"
-    - msftconnecttest.com
-    - msftncsi.com
-    - localhost.ptlogin2.qq.com
-    - localhost.sec.qq.com
-    - +.srv.nintendo.net
-    - +.stun.playstation.net
-    - xbox.*.microsoft.com
-    - xnotify.xboxlive.com
-    - +.battlenet.com.cn
-    - +.wotgame.cn
-    - +.wggames.cn
-    - +.wowsgame.cn
-    - +.wargaming.net
-    - proxy.golang.org
-    - stun.*.*
-    - stun.*.*.*
-    - +.stun.*.*
-    - +.stun.*.*.*
-    - +.stun.*.*.*.*
-    - heartbeat.belkin.com
-    - "*.linksys.com"
-    - "*.linksyssmartwifi.com"
-    - "*.router.asus.com"
-    - mesu.apple.com
-    - swscan.apple.com
-    - swquery.apple.com
-    - swdownload.apple.com
-    - swcdn.apple.com
-    - swdist.apple.com
-    - lens.l.google.com
-    - stun.l.google.com
-    - +.nflxvideo.net
-    - "*.square-enix.com"
-    - "*.finalfantasyxiv.com"
-    - "*.ffxiv.com"
-    - "*.mcdn.bilivideo.cn"
-    - +.media.dssott.com
 proxies:
   - name: XRAY_TROJAN_TCP_${user}
     server: ${sts}${domain}
@@ -233,27 +128,26 @@ rules:
   - MATCH,RakhaVPN-AUTOSCRIPT
 EOF
 
-clear
-echo -e ""
-echo -e "════[XRAY TROJAN TCP]════"
-echo -e "Remarks           : ${user}"
-echo -e "Domain            : ${domain}"
-echo -e "IP/Host           : ${MYIP}"
-echo -e "Port              : 443"
-echo -e "Key               : ${user}"
-echo -e "Network           : TCP"
-echo -e "Security          : TLS"
-echo -e "AllowInsecure     : True"
-echo -e "═══════════════════"
-echo -e "Link XRAY Trojan  : ${trojanlink}"
-echo -e "═══════════════════"
-echo -e "YAML XRAY Trojan  : http://${MYIP2}:81/$user-TRTCP.yaml"
-echo -e "═══════════════════"
-echo -e "Created On        : $hariini"
-echo -e "Expired On        : $exp"
-echo -e "═══════════════════"
-echo -e ""
-echo -e "Script Mod By Rakha-VPN"
+# === Output Akhir ===
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${WHITE}          Detail Akun Trojan TCP        ${NC}"
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e " ${WHITE}Remarks${NC}       : ${user}"
+echo -e " ${WHITE}Domain${NC}        : ${domain}"
+echo -e " ${WHITE}IP/Host${NC}       : ${MYIP}"
+echo -e " ${WHITE}Key/Password${NC}  : ${user}"
+echo -e " ${WHITE}Port${NC}          : 443"
+echo -e " ${WHITE}Network${NC}       : TCP"
+echo -e " ${WHITE}Security${NC}      : TLS"
+echo -e " ${WHITE}AllowInsecure${NC} : True"
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e " ${WHITE}Dibuat${NC}        : $hariini"
+echo -e " ${WHITE}Berakhir Pada${NC} : $exp"
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e " ${WHITE}Link Trojan${NC}   : ${trojanlink}"
+echo -e " ${WHITE}YAML Clash${NC}    : http://${MYIP}:81/$user-$exp-TRTCP.yaml"
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e " ${CYAN}Script Mod By Rakha-VPN${NC}"
 echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} Back to menu . . .") "
+read -p "$(echo -e "Tekan ${YELLOW}[Enter]${NC} untuk kembali ke menu...") "
 menu

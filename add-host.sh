@@ -3,7 +3,7 @@
 # Quick Setup | Script Setup Manager
 # Edition : Stable Edition V1.0
 # Auther  : RakhaVPN
-# (C) Copyright 2022
+# (C) Copyright 2025
 # =========================================
 clear
 red='\e[1;31m'

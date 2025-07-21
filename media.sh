@@ -289,5 +289,5 @@ echo -e "${Font_Green}Finished Test${Font_Suffix}"
 echo -e ""
 echo -e "Script Mod By NevermoreSSH"
 echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${Font_Green}Enter${Font_White} ${CYAN}]${Font_White} Back to menu . . .") "
+read -p "$( echo -e "Tekan ${orange}[ ${NC}${Font_Green}Enter${Font_White} ${CYAN}]${Font_White} Kembali ke menu . . .") "
 menu

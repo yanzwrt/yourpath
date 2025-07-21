@@ -49,11 +49,11 @@ ver=$VERSION_ID
 #Detail
 country="ID"
 state="Project"
-locality="Parit Buntar"
-organization="NevermoreSSH-Project"
-organizationalunit="NevermoreSSH-Project"
-commonname="NevermoreSSH-Project"
-email="NevermoreSSH-project@gmail.com"
+locality="Garut"
+organization="RakhaVPN-Project"
+organizationalunit="RakhaVPN-Project"
+commonname="RakhaVPN-Project"
+email="RakhaVPN-project@gmail.com"
 
 # go to root
 cd

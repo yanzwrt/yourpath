@@ -52,5 +52,5 @@ echo -e ""
 echo -e ""
 echo -e "Script Mod By RakhaVPN"
 echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} Back to menu . . .") "
+read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} kembali ke menu . . .") "
 menu

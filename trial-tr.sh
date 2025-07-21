@@ -30,7 +30,7 @@ sed -i '/#trnone$/a\### '"$user $exp"'\
 
 # Generate link akun
 trojanlink1="trojan://${uuid}@${domain}:443?type=ws&security=tls&host=${domain}&path=/trojan&sni=${domain}#XRAY_TROJAN_TLS_${user}"
-trojanlink2="trojan://${uuid}@${domain}:80?type=ws&security=none&host=${domain}&path=/trojan-ntls#XRAY_TROJAN_NTLS_${user}"
+trojanlink2="trojan://${uuid}@${domain}:80?type=ws&security=none&host=${domain}&path=/trojan#XRAY_TROJAN_NTLS_${user}"
 
 
 cat > /home/vps/public_html/$user-TRTLS.yaml <<EOF
@@ -178,13 +178,13 @@ proxies:
         Host: ${domain}
     udp: true
 proxy-groups:
-  - name: NevermoreSSH-Autoscript
+  - name: RakhaVPN-Autoscript
     type: select
     proxies:
       - XRAY_TROJAN_TLS_${user}
       - DIRECT
 rules:
-  - MATCH,NevermoreSSH-Autoscript
+  - MATCH,RakhaVPN-Autoscript
 EOF
 
 # Restart service

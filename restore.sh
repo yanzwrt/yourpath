@@ -12,8 +12,8 @@ orange='\e[0;33m'
 NC='\e[0m'
 clear
 echo ""
-echo " This Feature Can Only Be Used According To VPS Data With This Autoscript"
-echo " Please Insert VPS Data Backup Link To Restore The Data"
+echo " Fitur ini hanya dapat digunakan sesuai data VPS dari autoscript ini"
+echo " Silakan masukkan link backup data VPS untuk memulihkan data"
 echo ""
 #read -rp " Password File: " -e InputPass
 read -rp " Link File: " -e url
@@ -22,7 +22,7 @@ wget -O backup.zip "$url"
 unzip backup.zip
 rm -f backup.zip
 sleep 1
-echo -e "[ ${green}INFO${NC} ] Start Restore . . . "
+echo -e "[ ${green}INFO${NC} ] Memulai proses pemulihan data . . . "
 #cp -r /root/backup/.acme.sh /root/ &> /dev/null
 #cp -r /root/backup/premium-script /var/lib/ &> /dev/null
 #cp -r /root/backup/xray /usr/local/etc/ &> /dev/null
@@ -33,9 +33,9 @@ cp -r /root/backup/cron.d /etc/ &> /dev/null
 rm -rf /root/backup
 rm -f backup.zip
 echo ""
-echo -e "[ ${green}INFO${NC} ] VPS Data Restore Complete !"
+echo -e "[ ${green}INFO${NC} ] Pemulihan data VPS selesai!"
 echo ""
-echo -e "[ ${green}INFO${NC} ] Restart All Service"
+echo -e "[ ${green}INFO${NC} ] Memulai ulang semua layanan"
 systemctl restart nginx
 systemctl restart xray.service
 systemctl restart xray@none.service
@@ -47,5 +47,5 @@ systemctl restart xray@xtrojan.service
 systemctl restart xray@trojan.service
 service cron restart
 echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} Back to menu . . .") "
+read -p "$( echo -e "Tekan ${orange}[ ${NC}${green}Enter${NC} ${orange}]${NC} untuk kembali ke menu . . .") "
 menu

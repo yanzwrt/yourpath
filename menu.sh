@@ -89,12 +89,6 @@ echo -e "  ${RB}24.${NC} ${YB}MENU SWAP RAM                       💿"
 echo -e "  ${RB}25.${NC} ${YB}BERSIHKAN LOG                       🧽"
 echo -e "  ${RB}26.${NC} ${YB}KELUAR                              ❌"
 echo -e "${BB}╠════════════════════════════════════════════════════════════╣${NC}"
-echo -e "              ${WB}📦 Informasi Bandwidth 📦${NC}"
-echo -e "${BB}╠════════════════════════════════════════════════════════════╣${NC}"
-echo -e "  ${RB}♦️${NC} ${YB}Hari Ini   : $ttoday                     ${NC}"
-echo -e "  ${RB}♦️${NC} ${YB}Kemarin    : $tyest                      ${NC}"
-echo -e "  ${RB}♦️${NC} ${YB}Bulan Ini  : $tmon                       ${NC}"
-echo -e "${BB}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 read -p "📌 Pilih Menu [ 1 - 26 ] : " menu
 case $menu in

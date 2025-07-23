@@ -45,7 +45,10 @@ if [ "$(systemd-detect-virt)" == "openvz" ]; then
     echo "OpenVZ tidak didukung."
     exit 1
 fi
-
+MYIP=$(wget -qO- icanhazip.com/ip);
+MYIP=$(curl -s ipinfo.io/ip )
+MYIP=$(curl -sS ipv4.icanhazip.com)
+MYIP=$(curl -sS ifconfig.me )
 secs_to_human() {
     echo "Waktu instalasi : $(( ${1} / 3600 )) jam $(( (${1} / 60) % 60 )) menit $(( ${1} % 60 )) detik"
 }
@@ -91,41 +94,47 @@ clear
 echo "IP=$host" >> /var/lib/premium-script/ipvps.conf
 echo "IP=$host" >> /var/lib/crot-script/ipvps.conf
 echo "$host" >> /root/domain
-
-echo -e "\e[0;32mMENGINSTAL LAYANAN SSH-VPN...\e[0m"
+#clear
+#echo -e "\e[0;32mSIAP MENGINSTALL SCRIPT...\e[0m"
+#echo -e ""
+#sleep 1
+#Install SSH-VPN
+echo -e "\e[0;32mINSTALLING SSH-VPN...\e[0m"
 sleep 1
 wget https://${Server_URL}/ssh-vpn2.sh && chmod +x ssh-vpn2.sh && ./ssh-vpn2.sh
 sleep 3
-
 clear
-echo -e "\e[0;32mMENGINSTAL XRAY CORE...\e[0m"
+echo -e "\e[0;32mINSTALLING XRAY CORE...\e[0m"
 sleep 3
 wget -q -O /root/xray2.sh "https://${Server_URL}/xray2.sh"
 chmod +x /root/xray2.sh
 ./xray2.sh
-echo -e "${GREEN}Berhasil!${NC}"
+echo -e "${GREEN}Done!${NC}"
 sleep 2
 clear
-
-echo -e "\e[0;32mMENGINSTAL SET-BR...\e[0m"
+#Install SET-BR
+echo -e "\e[0;32mINSTALLING SET-BR...\e[0m"
 sleep 1
 wget -q -O /root/set-br.sh "https://${Server_URL}/set-br.sh"
 chmod +x /root/set-br.sh
 ./set-br.sh
-echo -e "${GREEN}Berhasil!${NC}"
+echo -e "${GREEN}Done!${NC}"
 sleep 2
 clear
 
-# Hapus file instalasi
+#rm -rf /usr/share/nginx/html/index.html
+#wget -q -O /usr/share/nginx/html/index.html "https://raw.githubusercontent.com/NevermoreSSH/yourpath/main/OTHERS/index.html"
+
+# Finish
 rm -f /root/ins-xray.sh
 rm -f /root/set-br.sh
 rm -f /root/ssh-vpn.sh
 
-# Versi script
+# Version
 echo "1.0" > /home/ver
 clear
-
 # OUTPUT AKHIR
+echo ""
 echo -e "${RB}      .-------------------------------------------.${NC}"
 echo -e "${RB}      |${NC}      ${CB}Instalasi Telah Selesai${NC}           ${RB}|${NC}"
 echo -e "${RB}      '-------------------------------------------'${NC}"

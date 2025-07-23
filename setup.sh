@@ -49,26 +49,26 @@ green() { echo -e "\\033[32;1m${*}\\033[0m"; }
 red() { echo -e "\\033[31;1m${*}\\033[0m"; }
 
 if [ "${EUID}" -ne 0 ]; then
-		echo "You need to run this script as root"
+		echo "Anda perlu menjalankan skrip ini sebaga root"
 		exit 1
 fi
 if [ "$(systemd-detect-virt)" == "openvz" ]; then
-		echo "OpenVZ is not supported"
+		echo "OpenVZ tidak didukung"
 		exit 1
 fi
 MYIP=$(wget -qO- icanhazip.com/ip);
 secs_to_human() {
-    echo "Installation time : $(( ${1} / 3600 )) hours $(( (${1} / 60) % 60 )) minutes $(( ${1} % 60 )) seconds"
+    echo "Waktu instalasi : $(( ${1} / 3600 )) hours $(( (${1} / 60) % 60 )) minutes $(( ${1} % 60 )) seconds"
 }
 start=$(date +%s)
 
-echo -e "[ ${green}INFO${NC} ] Preparing the autoscript installation ~"
+echo -e "[ ${green}INFO${NC} ] Mempersiapkan instalasi autoscript ~"
 apt install git curl -y >/dev/null 2>&1
-echo -e "[ ${green}INFO${NC} ] Installation file is ready to begin !"
+echo -e "[ ${green}INFO${NC} ] File instalasi siap untuk dimulai !"
 sleep 1
 
 if [ -f "/usr/local/etc/xray/domain" ]; then
-echo "Script Already Installed"
+echo "Skrip Sudah Terpasang"
 exit 0
 fi
 
@@ -77,12 +77,12 @@ mkdir /var/lib/crot-script;
 clear
 #echo -e "${red}♦️${NC} ${green}Established By yanzwrt 2025${NC} ${red}♦️${NC}"
 #DOWNLOAD SOURCE SCRIPT
-echo -e "${red}    ♦️${NC} ${green} CUSTOM SETUP DOMAIN VPS     ${NC}"
+echo -e "${red}    ♦️${NC} ${green} PENYIAPAN DOMAIN VPS     ${NC}"
 echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m${NC}"
 echo "1. Gunakan Domain Dari Script"
 echo "2. Pilih Domain Sendiri"
 echo -e "${red}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m${NC}"
-read -rp "Choose Your Domain Installation : " dom 
+read -rp "Pilih Instalasi Domain Anda : " dom 
 
 if test $dom -eq 1; then
 clear
@@ -90,10 +90,10 @@ wget -q -O /root/cf.sh "https://${Server_URL}/cf.sh"
 chmod +x /root/cf.sh
 ./cf.sh
 elif test $dom -eq 2; then
-read -rp "Enter Your Domain : " domen 
+read -rp "Masukkan Domain Anda : " domen 
 echo $domen > /root/domain
 else 
-echo "Not Found Argument"
+echo "Argumen Tidak Ditemukan"
 exit 1
 fi
 echo -e "${GREEN}Done!${NC}"
@@ -143,10 +143,10 @@ echo "1.0" > /home/ver
 clear
 echo ""
 echo -e "${RB}      .-------------------------------------------.${NC}"
-echo -e "${RB}      |${NC}      ${CB}Installation Has Been Completed${NC}      ${RB}|${NC}"
+echo -e "${RB}      |${NC}      ${CB}Instalasi Telah Selesai${NC}      ${RB}|${NC}"
 echo -e "${RB}      '-------------------------------------------'${NC}"
 echo -e "${BB}————————————————————————————————————————————————————————${NC}"
-echo -e "      ${WB}Multiport Websocket Autoscript By yanzwrt${NC}"
+echo -e "      ${WB}Multiport Websocket Autoscript By RAKHA-VPN${NC}"
 echo -e "${BB}————————————————————————————————————————————————————————${NC}"
 echo -e "  ${WB}»»» Protocol Service «««  |  »»» Network Protocol «««${NC}  "
 echo -e "${BB}————————————————————————————————————————————————————————${NC}"
@@ -195,5 +195,5 @@ echo ""
 rm -r setup.sh
 echo ""
 echo ""
-read -p "$( echo -e "Press ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} For Reboot") "
+read -p "$( echo -e "tekan ${orange}[ ${NC}${green}Enter${NC} ${CYAN}]${NC} untuk memulai ulang") "
 reboot

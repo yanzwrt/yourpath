@@ -36,9 +36,11 @@ trws=$(grep -c -E "^### $user" "/usr/local/etc/xray/trojanws.json")
 txtls=$(grep -c -E "^### $user" "/usr/local/etc/xray/xtrojan.json")
 tr=$(grep -c -E "^### $user" "/usr/local/etc/xray/trojan.json")
 # Total Bandwidth
-ttoday="$(vnstat | grep today | awk '{print $8" "substr ($9, 1, 1)}')"
-tyest="$(vnstat | grep yesterday | awk '{print $8" "substr ($9, 1, 1)}')"
-tmon="$(vnstat -m | grep "$(date '+%Y-%m')" | awk '{print $8" "substr ($9, 1, 1)}')"
+#ttoday="$(vnstat | grep today | awk '{print $8" "substr ($9, 1, 1)}')"
+#tyest="$(vnstat | grep yesterday | awk '{print $8" "substr ($9, 1, 1)}')"
+#tmon="$(vnstat -m | grep "$(date '+%Y-%m')" | awk '{print $8" "substr ($9, 1, 1)}')"
+daily_usage=$(vnstat -d --oneline | awk -F\; '{print $6}' | sed 's/ //')
+monthly_usage=$(vnstat -m --oneline | awk -F\; '{print $11}' | sed 's/ //')
 
 clear
 echo -e "${BB}╔════════════════════════════════════════════════════════════╗${NC}"
@@ -53,6 +55,7 @@ echo -e "  ${RB}♦️${NC} ${YB}CPU       : $load_cpu ${NC}"
 echo -e "  ${RB}♦️${NC} ${YB}RAM       : $uram MB / $tram MB ${NC}"
 echo -e "  ${RB}♦️${NC} ${YB}DOMAIN    : $domain ${NC}"
 echo -e "  ${RB}♦️${NC} ${YB}IP VPS    : $IPVPS ${NC}"
+echo -e "  ${RB}♦️${NC} ${YB}Bandwidth : Hari ini: $daily_usage / Bulan ini: $monthly_usage${NC}"
 echo -e "${BB}╠════════════════════════════════════════════════════════════╣${NC}"
 echo -e "                      ${WB}⚙️  Menu XRAYS  ⚙️${NC}"
 echo -e "${BB}╠════════════════════════════════════════════════════════════╣${NC}"
